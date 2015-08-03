@@ -26,7 +26,8 @@ import yaml
 sys.path.append('.')
 from lib import common
 from lib.common import print_
-
+from requests.packages import urllib3
+urllib3.disable_warnings()
 
 ACTIVITIES_CONFIG_FILE = 'activities.config'
 CONFIG_FILE = 'redminetimesync.config'
@@ -237,11 +238,11 @@ if __name__ == '__main__':
 
     # Connects to Redmine
     if api_key:
-        redmine = Redmine(config.get('redmine', 'url'), key=api_key)
+        redmine = Redmine(config.get('redmine', 'url'), key=api_key, requests={'verify': False})
     else:
         if not password:
             password = getpass.getpass('{}\'s password: '.format(login))
-        redmine = Redmine(config.get('redmine', 'url'), username=login, password=password)
+        redmine = Redmine(config.get('redmine', 'url'), username=login, password=password, requests={'verify': False})
     print_('-> Connecting to Redmine...')
 
     try:
